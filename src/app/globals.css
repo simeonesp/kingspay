@@ -54,10 +54,10 @@
 }
 
 @theme inline {
-  --color-background: var(--color-background);
-  --color-foreground: var(--color-dark);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
+  --color-background: #F5F8FF;
+  --color-foreground: #000000;
+  --font-sans: var(--font-geist-sans), "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), "JetBrains Mono", monospace;
 }
 
 /* Force light mode */
