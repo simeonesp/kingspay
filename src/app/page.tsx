@@ -3,854 +3,559 @@
 import React, { useState, useEffect } from 'react';
 import {
   ArrowRight,
-  Smartphone,
-  Monitor,
-  ShoppingCart,
-  Shield,
+  ArrowUpRight,
   Zap,
   Globe,
   Lock,
-  TrendingUp,
-  CheckCircle2,
-  Star,
+  ChevronRight,
   Menu,
   X,
-  ChevronRight,
-  CreditCard,
-  BarChart3,
-  Building2,
-  Users,
+  CheckCircle2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-function Logo({ dark = false }: { dark?: boolean }) {
+/* ── Navbar ── */
+function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 24);
+    window.addEventListener('scroll', fn, { passive: true });
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+
+  const links = ['Products', 'For Merchants', 'For Payers', 'Pricing', 'About'];
+
   return (
-    <a
-      href="/"
-      className="flex items-center gap-1.5 font-bold text-lg tracking-tight focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0000EE] rounded-md"
-      aria-label="KingsPay home"
+    <header
+      className={cn(
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+        scrolled
+          ? 'bg-[#030712]/90 backdrop-blur-md border-b border-white/[0.06]'
+          : 'bg-transparent'
+      )}
     >
-      <span className="w-7 h-7 rounded-[8px] bg-[#0000EE] text-white text-sm font-black flex items-center justify-center">
-        K
-      </span>
-      <span className={dark ? 'text-white' : 'text-[#111827]'}>
-        Kings<span className="text-[#0000EE]">Pay</span>
-      </span>
-    </a>
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <a href="/" className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-[7px] bg-[#0000EE] flex items-center justify-center text-white font-black text-sm">
+            K
+          </div>
+          <span className="text-white font-semibold tracking-tight text-[15px]">
+            Kings<span className="text-[#00B3FF]">Pay</span>
+          </span>
+        </a>
+
+        <nav className="hidden md:flex items-center gap-7">
+          {links.map((l) => (
+            <a key={l} href="#" className="text-[13px] text-white/50 hover:text-white transition-colors">
+              {l}
+            </a>
+          ))}
+        </nav>
+
+        <div className="hidden md:flex items-center gap-3">
+          <a href="/onboarding" className="text-[13px] text-white/50 hover:text-white transition-colors">
+            Sign in
+          </a>
+          <a
+            href="/onboarding"
+            className="h-8 px-4 rounded-full bg-white text-[#030712] text-[13px] font-semibold hover:bg-white/90 transition-colors flex items-center"
+          >
+            Get started
+          </a>
+        </div>
+
+        <button
+          className="md:hidden text-white/60 hover:text-white"
+          onClick={() => setOpen(!open)}
+          aria-label="Toggle menu"
+        >
+          {open ? <X size={20} /> : <Menu size={20} />}
+        </button>
+      </div>
+
+      {open && (
+        <div className="md:hidden bg-[#030712] border-t border-white/[0.06] px-6 py-5 space-y-4">
+          {links.map((l) => (
+            <a key={l} href="#" className="block text-white/60 hover:text-white text-sm">{l}</a>
+          ))}
+          <a href="/onboarding" className="block w-full text-center h-10 rounded-full bg-white text-[#030712] text-sm font-semibold leading-10 mt-2">
+            Get started
+          </a>
+        </div>
+      )}
+    </header>
   );
 }
 
-export default function LandingPage() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 16);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
+/* ── Hero ── */
+function Hero() {
   return (
-    <div className="flex flex-col min-h-screen bg-white text-[#111827]">
-      {/* ============================
-          NAVBAR
-      ============================ */}
-      <header
-        className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-          scrolled
-            ? 'bg-white/95 backdrop-blur-md border-b border-[#E5E7EB] shadow-sm'
-            : 'bg-transparent'
-        )}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="h-16 flex items-center justify-between gap-4">
-            <Logo />
+    <section className="relative min-h-screen bg-[#030712] overflow-hidden flex flex-col items-center justify-center pt-16">
+      <div
+        className="absolute inset-0 opacity-[0.15]"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(0,179,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0,179,255,0.3) 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+        }}
+      />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#0000EE]/20 blur-[120px] pointer-events-none" />
+      <div className="absolute top-2/3 right-1/4 w-[300px] h-[300px] rounded-full bg-[#00B3FF]/10 blur-[100px] pointer-events-none" />
 
-            {/* Desktop nav */}
-            <nav
-              className="hidden md:flex items-center gap-1"
-              aria-label="Main navigation"
-            >
-              {['For Merchants', 'For Payers', 'Pricing', 'About'].map((link) => (
-                <a
-                  key={link}
-                  href={`#${link.toLowerCase().replace(/ /g, '-')}`}
-                  className="px-3.5 py-1.5 text-sm font-medium text-[#374151] hover:text-[#111827] rounded-lg hover:bg-[#F5F8FF] transition-all"
-                >
-                  {link}
-                </a>
-              ))}
-            </nav>
-
-            {/* Desktop CTA */}
-            <div className="hidden md:flex items-center gap-2">
-              <a
-                href="/login"
-                className="px-4 py-2 text-sm font-semibold text-[#374151] hover:text-[#111827] rounded-lg hover:bg-[#F5F8FF] transition-all"
-              >
-                Sign in
-              </a>
-              <a
-                href="/onboarding"
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#0000EE] text-white text-sm font-semibold rounded-[10px] hover:bg-[#0000CC] transition-all shadow-sm hover:shadow-md"
-              >
-                Get started
-                <ArrowRight size={13} aria-hidden="true" />
-              </a>
-            </div>
-
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setMenuOpen((v) => !v)}
-              className="md:hidden p-2 rounded-lg hover:bg-[#F5F8FF] text-[#374151] transition-colors"
-              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={menuOpen}
-            >
-              {menuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
-          </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#0000EE]/40 bg-[#0000EE]/10 text-[#00B3FF] text-xs font-medium mb-8">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00B3FF] animate-pulse" />
+          Now live in 40+ countries — instant settlement
         </div>
 
-        {/* Mobile menu */}
-        {menuOpen && (
-          <div className="md:hidden bg-white border-t border-[#E5E7EB] px-4 py-4 flex flex-col gap-1 animate-fade-in">
-            {['For Merchants', 'For Payers', 'Pricing', 'About'].map((link) => (
-              <a
-                key={link}
-                href={`#${link.toLowerCase().replace(/ /g, '-')}`}
-                onClick={() => setMenuOpen(false)}
-                className="px-3 py-2.5 text-sm font-medium text-[#374151] hover:text-[#111827] rounded-lg hover:bg-[#F5F8FF] transition-all"
-              >
-                {link}
-              </a>
-            ))}
-            <div className="flex flex-col gap-2 pt-3 border-t border-[#E5E7EB] mt-2">
-              <a
-                href="/login"
-                className="px-3 py-2.5 text-sm font-semibold text-center text-[#374151] border border-[#E5E7EB] rounded-xl hover:bg-[#F5F8FF] transition-all"
-              >
-                Sign in
-              </a>
-              <a
-                href="/onboarding"
-                className="px-3 py-2.5 text-sm font-semibold text-center bg-[#0000EE] text-white rounded-xl hover:bg-[#0000CC] transition-all"
-              >
-                Get started — free
-              </a>
-            </div>
+        <h1 className="text-5xl sm:text-6xl lg:text-[80px] font-bold text-white leading-[1.06] tracking-tight max-w-4xl mx-auto mb-6">
+          Payments that move<br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0000EE] to-[#00B3FF]">
+            at the speed of trust.
+          </span>
+        </h1>
+
+        <p className="text-white/50 text-lg max-w-xl mx-auto mb-10 leading-relaxed">
+          KingsPay gives merchants and consumers a single platform for fast, secure,
+          borderless payments. No hidden fees. No legacy friction.
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-16">
+          <a
+            href="/onboarding"
+            className="h-12 px-7 rounded-full bg-[#0000EE] text-white text-sm font-semibold flex items-center gap-2 hover:bg-[#0000CC] transition-colors"
+          >
+            Start as a Merchant <ArrowRight size={15} />
+          </a>
+          <a
+            href="/payer"
+            className="h-12 px-7 rounded-full border border-white/15 text-white text-sm font-medium flex items-center gap-2 hover:border-white/30 hover:bg-white/5 transition-colors"
+          >
+            Download the App <ArrowUpRight size={15} />
+          </a>
+        </div>
+
+        {/* Phone mockup */}
+        <div className="relative mx-auto max-w-[320px]">
+          <div className="absolute -left-24 top-16 hidden lg:flex items-center gap-2 px-3 py-2 rounded-xl bg-white/[0.05] border border-white/[0.08] backdrop-blur-sm">
+            <span className="text-[11px] text-[#10B981] font-medium">+£1,200.00 Settled</span>
           </div>
-        )}
-      </header>
+          <div className="absolute -right-28 top-32 hidden lg:flex items-center gap-2 px-3 py-2 rounded-xl bg-[#0000EE]/20 border border-[#0000EE]/30 backdrop-blur-sm">
+            <Zap size={12} className="text-[#00B3FF]" />
+            <span className="text-[11px] text-white/70">Instant</span>
+          </div>
 
-      {/* ============================
-          HERO
-      ============================ */}
-      <section className="relative overflow-hidden pt-28 pb-20 sm:pt-36 sm:pb-28 bg-white">
-        {/* Background grid */}
-        <div
-          className="absolute inset-0 bg-grid-pattern opacity-60 pointer-events-none"
-          aria-hidden="true"
-        />
-        {/* Blue glow */}
-        <div
-          className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#0000EE]/5 rounded-full blur-3xl pointer-events-none"
-          aria-hidden="true"
-        />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Left: Copy */}
-            <div className="flex flex-col gap-6 animate-fade-in">
-              <div className="inline-flex items-center gap-2 bg-[#E8E8FF] text-[#0000EE] text-xs font-semibold px-3 py-1.5 rounded-full w-fit">
-                <Zap size={11} aria-hidden="true" />
-                Now in 40+ countries — instant settlement
+          <div className="rounded-[36px] bg-[#0A0F1E] border border-white/10 shadow-2xl overflow-hidden p-2">
+            <div className="rounded-[28px] bg-[#0D1424] overflow-hidden">
+              <div className="flex items-center justify-between px-5 pt-4 pb-2">
+                <span className="text-white/50 text-[11px] font-medium">9:41</span>
+                <div className="w-20 h-4 rounded-full bg-black" />
+                <div className="w-4 h-2.5 rounded-sm border border-white/30" />
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#111827] leading-[1.05] tracking-tight">
-                Payments that move at the{' '}
-                <span className="text-[#0000EE]">speed of trust.</span>
-              </h1>
-
-              <p className="text-lg text-[#6B7280] leading-relaxed max-w-lg">
-                KingsPay gives merchants and consumers a single platform for fast,
-                secure, borderless payments. No hidden fees. No legacy friction.
-                Just money moving the way it should.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-3">
-                <a
-                  href="/onboarding"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#0000EE] text-white font-semibold rounded-[14px] hover:bg-[#0000CC] active:bg-[#0000AA] transition-all shadow-md hover:shadow-lg text-base"
-                >
-                  Start as a Merchant
-                  <ArrowRight size={16} aria-hidden="true" />
-                </a>
-                <a
-                  href="/payer"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 border-2 border-[#0000EE] text-[#0000EE] font-semibold rounded-[14px] hover:bg-[#E8E8FF] transition-all text-base"
-                >
-                  Download the App
-                  <Smartphone size={16} aria-hidden="true" />
-                </a>
+              <div className="px-5 pb-3 flex items-center justify-between">
+                <span className="text-white font-semibold text-[15px]">Kings<span className="text-[#00B3FF]">Pay</span></span>
+                <div className="w-7 h-7 rounded-full bg-[#0000EE]/30 border border-[#0000EE]/50 flex items-center justify-center">
+                  <span className="text-[#00B3FF] text-[10px] font-bold">K</span>
+                </div>
               </div>
 
-              <p className="text-xs text-[#9CA3AF]">
-                No setup fees &middot; No monthly minimums &middot; Cancel anytime
-              </p>
-            </div>
+              <div className="mx-4 mb-4 rounded-2xl bg-gradient-to-br from-[#0000EE] to-[#00B3FF] p-4">
+                <p className="text-white/70 text-[11px] mb-1">Available balance</p>
+                <p className="text-white font-bold text-2xl tracking-tight tabular-nums">£2,481.50</p>
+                <div className="flex items-center gap-1.5 mt-2">
+                  <span className="text-white/60 text-[11px] font-mono">•••• 4291</span>
+                </div>
+              </div>
 
-            {/* Right: Phone mockup */}
-            <div className="flex items-center justify-center lg:justify-end animate-slide-in-right">
-              <div
-                className="relative w-[260px] sm:w-[280px]"
-                aria-hidden="true"
-              >
-                {/* Phone frame */}
-                <div className="bg-[#111827] rounded-[40px] p-3 shadow-2xl">
-                  <div className="bg-[#F5F8FF] rounded-[32px] overflow-hidden h-[520px] flex flex-col">
-                    {/* Status bar */}
-                    <div className="bg-white px-5 pt-3 pb-2 flex items-center justify-between">
-                      <span className="text-xs font-bold text-[#111827]">9:41</span>
-                      <div className="flex gap-1">
-                        <div className="w-3 h-1.5 bg-[#111827] rounded-sm" />
-                        <div className="w-1.5 h-1.5 bg-[#111827] rounded-full" />
-                      </div>
-                    </div>
-
-                    {/* App content */}
-                    <div className="flex-1 px-4 pt-3 pb-5 flex flex-col gap-3">
-                      <p className="text-xs font-bold text-[#111827]">
-                        Kings<span className="text-[#FF6B35]">Pay</span>
-                      </p>
-
-                      {/* Balance card */}
-                      <div className="bg-gradient-to-br from-[#0000EE] to-[#0055FF] rounded-2xl p-4 text-white">
-                        <p className="text-xs opacity-70">Available balance</p>
-                        <p className="text-2xl font-black mt-0.5 tabular-nums">£2,481.50</p>
-                        <div className="flex items-center gap-1 mt-2">
-                          <div className="w-6 h-3.5 bg-[#F59E0B] rounded-sm opacity-90" />
-                          <span className="text-xs opacity-60">•••• 4291</span>
-                        </div>
-                      </div>
-
-                      {/* Quick actions */}
-                      <div className="grid grid-cols-3 gap-2">
-                        {[
-                          { icon: '💸', label: 'Send' },
-                          { icon: '📥', label: 'Receive' },
-                          { icon: '💳', label: 'Cards' },
-                        ].map((action) => (
-                          <div
-                            key={action.label}
-                            className="bg-white rounded-xl p-2.5 flex flex-col items-center gap-1 shadow-sm border border-[#F3F4F6]"
-                          >
-                            <span className="text-base">{action.icon}</span>
-                            <span className="text-[9px] font-semibold text-[#374151]">
-                              {action.label}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Recent */}
-                      <p className="text-xs font-bold text-[#374151]">Recent</p>
-                      {[
-                        { name: 'Riverside Café', amount: '-£4.80', color: '#10B981', emoji: '☕' },
-                        { name: 'TechFlow Studios', amount: '-£250', color: '#0000EE', emoji: '💻' },
-                        { name: 'Payout received', amount: '+£1,200', color: '#FF6B35', emoji: '✅' },
-                      ].map((tx) => (
-                        <div
-                          key={tx.name}
-                          className="bg-white rounded-xl px-3 py-2 flex items-center gap-2.5 shadow-sm border border-[#F3F4F6]"
-                        >
-                          <span className="text-sm">{tx.emoji}</span>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-[10px] font-semibold text-[#111827] truncate">
-                              {tx.name}
-                            </p>
-                            <p className="text-[9px] text-[#9CA3AF]">Today</p>
-                          </div>
-                          <p
-                            className="text-xs font-bold tabular-nums"
-                            style={{ color: tx.color }}
-                          >
-                            {tx.amount}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
+              <div className="grid grid-cols-3 gap-2 mx-4 mb-5">
+                {['Send', 'Receive', 'Cards'].map((a) => (
+                  <div key={a} className="flex flex-col items-center gap-1.5 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06]">
+                    <div className="w-8 h-8 rounded-lg bg-[#0000EE]/20 border border-[#0000EE]/20" />
+                    <span className="text-white/60 text-[10px]">{a}</span>
                   </div>
-                </div>
+                ))}
+              </div>
 
-                {/* Floating accent pill */}
-                <div className="absolute -right-4 top-16 bg-[#00B3FF] text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
-                  Instant ⚡
-                </div>
-                <div className="absolute -left-6 bottom-20 bg-white text-[#111827] text-xs font-semibold px-3 py-2 rounded-xl shadow-lg border border-[#E5E7EB]">
-                  <p className="text-[10px] text-[#9CA3AF]">Settled</p>
-                  <p className="font-black text-[#10B981]">+£1,200</p>
-                </div>
+              <div className="px-4 pb-6 space-y-1">
+                <p className="text-white/40 text-[11px] font-medium mb-3 uppercase tracking-wider">Recent</p>
+                {[
+                  { name: 'Riverside Café', amount: '−£4.80', pos: false },
+                  { name: 'TechFlow Studios', amount: '−£250', pos: false },
+                  { name: 'Payout received', amount: '+£1,200', pos: true },
+                ].map((t) => (
+                  <div key={t.name} className="flex items-center justify-between py-2.5 border-b border-white/[0.04]">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-full bg-white/[0.06]" />
+                      <div>
+                        <p className="text-white/80 text-[12px] font-medium">{t.name}</p>
+                        <p className="text-white/30 text-[10px]">Today</p>
+                      </div>
+                    </div>
+                    <span className={cn('text-[12px] font-semibold tabular-nums', t.pos ? 'text-[#10B981]' : 'text-white/60')}>{t.amount}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* ============================
-          TRUST BAR
-      ============================ */}
-      <section className="py-8 border-y border-[#E5E7EB] bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
-            {[
-              { icon: <Shield size={16} className="text-[#0000EE]" />, label: 'PCI DSS Compliant' },
-              { icon: <Lock size={16} className="text-[#0000EE]" />, label: '256-bit Encryption' },
-              { icon: <CheckCircle2 size={16} className="text-[#0000EE]" />, label: 'SOC 2 Type II' },
-              { icon: <Zap size={16} className="text-[#0000EE]" />, label: '99.9% Uptime' },
-              { icon: <Globe size={16} className="text-[#0000EE]" />, label: '40+ Countries' },
-            ].map(({ icon, label }) => (
-              <div
-                key={label}
-                className="flex items-center gap-2 text-sm font-semibold text-[#374151]"
-              >
-                {icon}
-                {label}
-              </div>
-            ))}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#030712] to-transparent" />
+    </section>
+  );
+}
+
+/* ── Partner bar ── */
+function PartnerBar() {
+  const items = ['PCI DSS', 'SOC 2 Type II', '256-bit TLS', '99.9% Uptime', '40+ Countries', 'ISO 27001', 'GDPR Ready', 'Instant Settlement'];
+  return (
+    <section className="bg-[#030712] border-y border-white/[0.05] py-5 overflow-hidden">
+      <div className="flex items-center gap-10 px-8 whitespace-nowrap">
+        {[...items, ...items].map((p, i) => (
+          <span key={i} className="text-white/20 text-[11px] font-medium uppercase tracking-widest flex items-center gap-2">
+            <span className="w-1 h-1 rounded-full bg-white/15" />
+            {p}
+          </span>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ── Reusable product section ── */
+function ProductSection({
+  eyebrow, headline, body, link, visual, reverse = false,
+}: {
+  eyebrow: string; headline: string; body: string; link: string;
+  visual: React.ReactNode; reverse?: boolean;
+}) {
+  return (
+    <section className="bg-[#030712] py-24 border-b border-white/[0.05]">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className={cn('flex flex-col lg:flex-row items-center gap-16', reverse && 'lg:flex-row-reverse')}>
+          <div className="flex-1 max-w-lg">
+            <p className="text-[#00B3FF] text-xs font-semibold uppercase tracking-widest mb-4">{eyebrow}</p>
+            <h2 className="text-3xl lg:text-4xl font-bold text-white leading-tight mb-5">{headline}</h2>
+            <p className="text-white/45 text-base leading-relaxed mb-8">{body}</p>
+            <a href="#" className="inline-flex items-center gap-2 text-white text-sm font-medium hover:text-[#00B3FF] transition-colors">
+              {link} <ArrowUpRight size={14} />
+            </a>
           </div>
+          <div className="flex-1 w-full max-w-xl">{visual}</div>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
 
-      {/* ============================
-          HOW IT WORKS
-      ============================ */}
-      <section
-        id="for-merchants"
-        className="py-20 sm:py-28 bg-[#000B2E]"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <span className="inline-block text-xs font-semibold text-[#00B3FF] uppercase tracking-widest mb-3">
-              For Merchants
-            </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
-              Accept payments in minutes,
-              <br className="hidden sm:block" />
-              not weeks.
-            </h2>
-            <p className="mt-4 text-base text-[#94A3B8] max-w-xl mx-auto leading-relaxed">
-              From sign-up to your first transaction, KingsPay gets you live faster than
-              any legacy payment provider.
+/* ── Dashboard visual ── */
+function DashboardVisual() {
+  const rows = [
+    { desc: 'Payment from Sarah J.', amount: '+£249.99', status: 'Completed', color: '#10B981' },
+    { desc: 'Weekly payout to Barclays', amount: '−£1,842.50', status: 'Payout', color: '#00B3FF' },
+    { desc: 'Payment from Acme Corp', amount: '+£7,500.00', status: 'Completed', color: '#10B981' },
+    { desc: 'Refund — Order #8821', amount: '−£89.99', status: 'Refunded', color: '#F59E0B' },
+    { desc: 'Platform fee — May 2026', amount: '−£29.99', status: 'Fee', color: '#6B7280' },
+  ];
+  return (
+    <div className="rounded-2xl bg-[#080D1A] border border-white/[0.07] overflow-hidden shadow-2xl">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 rounded-md bg-[#0000EE]/20 border border-[#0000EE]/30 flex items-center justify-center">
+            <span className="text-[#00B3FF] text-[8px] font-bold">K</span>
+          </div>
+          <span className="text-white/50 text-xs">KingsPay Dashboard</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="w-2 h-2 rounded-full bg-[#10B981]" />
+          <span className="text-white/30 text-[11px]">Live</span>
+        </div>
+      </div>
+      <div className="grid grid-cols-3 divide-x divide-white/[0.05] border-b border-white/[0.06]">
+        {[{ label: 'Revenue', val: '£48,291.40' }, { label: 'Transactions', val: '1,847' }, { label: 'Pending', val: '£3,210.00' }].map((s) => (
+          <div key={s.label} className="px-4 py-4">
+            <p className="text-white/25 text-[10px] uppercase tracking-wider mb-1">{s.label}</p>
+            <p className="text-white font-semibold text-sm tabular-nums">{s.val}</p>
+          </div>
+        ))}
+      </div>
+      <div className="divide-y divide-white/[0.04]">
+        {rows.map((r) => (
+          <div key={r.desc} className="flex items-center justify-between px-5 py-3">
+            <p className="text-white/60 text-[12px]">{r.desc}</p>
+            <div className="flex items-center gap-3">
+              <span className="text-[11px] tabular-nums text-white/45">{r.amount}</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ color: r.color, backgroundColor: `${r.color}18` }}>{r.status}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Network visual ── */
+function NetworkVisual() {
+  const nodes = [
+    { label: 'KingsPay', x: 50, y: 50, primary: true },
+    { label: 'UK', x: 22, y: 22 }, { label: 'US', x: 78, y: 22 },
+    { label: 'Nigeria', x: 15, y: 72 }, { label: 'Kenya', x: 85, y: 72 },
+    { label: 'EU', x: 50, y: 88 }, { label: 'India', x: 50, y: 12 },
+  ];
+  return (
+    <div className="rounded-2xl bg-[#080D1A] border border-white/[0.07] overflow-hidden aspect-square max-w-sm mx-auto relative">
+      <svg className="absolute inset-0 w-full h-full">
+        {nodes.filter(n => !n.primary).map((n, i) => (
+          <line key={i} x1="50%" y1="50%" x2={`${n.x}%`} y2={`${n.y}%`}
+            stroke="rgba(0,179,255,0.1)" strokeWidth="1" strokeDasharray="4 4" />
+        ))}
+      </svg>
+      {nodes.map((n) => (
+        <div key={n.label} className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1"
+          style={{ left: `${n.x}%`, top: `${n.y}%` }}>
+          <div className={cn('rounded-full border flex items-center justify-center text-[10px] font-bold',
+            n.primary
+              ? 'w-12 h-12 bg-[#0000EE] border-[#0000EE]/60 text-white shadow-lg'
+              : 'w-8 h-8 bg-[#0000EE]/10 border-[#0000EE]/20 text-[#00B3FF]')}>
+            {n.primary ? 'K' : n.label[0]}
+          </div>
+          {!n.primary && <span className="text-white/25 text-[9px]">{n.label}</span>}
+        </div>
+      ))}
+      <div className="absolute bottom-5 left-5 right-5">
+        <div className="rounded-xl bg-white/[0.04] border border-white/[0.06] px-4 py-3">
+          <p className="text-white/25 text-[10px] uppercase tracking-wider mb-0.5">Active corridors</p>
+          <p className="text-white font-semibold">40+ Countries</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Security visual ── */
+function SecurityVisual() {
+  const checks = [
+    'PCI DSS Level 1 certified',
+    '256-bit TLS encryption in transit',
+    'SOC 2 Type II audited annually',
+    'Zero plaintext storage of card data',
+    'Biometric & 2FA authentication',
+    'Real-time fraud detection engine',
+  ];
+  return (
+    <div className="rounded-2xl bg-[#080D1A] border border-white/[0.07] overflow-hidden p-6">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 rounded-xl bg-[#0000EE]/15 border border-[#0000EE]/25 flex items-center justify-center">
+          <Lock size={18} className="text-[#00B3FF]" />
+        </div>
+        <div>
+          <p className="text-white font-semibold text-sm">Enterprise Security</p>
+          <p className="text-white/35 text-xs">Bank-grade protection by default</p>
+        </div>
+      </div>
+      <div className="space-y-0">
+        {checks.map((c, i) => (
+          <div key={i} className="flex items-center gap-3 py-3 border-b border-white/[0.04] last:border-0">
+            <CheckCircle2 size={13} className="text-[#10B981] flex-shrink-0" />
+            <span className="text-white/50 text-sm">{c}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Feature columns ── */
+function Features() {
+  const cols = [
+    { icon: <Zap size={17} className="text-[#00B3FF]" />, title: 'Instant', body: 'Money moves in real time across borders, networks, and currencies — infrastructure built to power always-on, global payments.' },
+    { icon: <Globe size={17} className="text-[#00B3FF]" />, title: 'Open', body: 'KingsPay works with stablecoins, fiat, and everything in between. No gatekeepers, no proprietary rails, no lock-in.' },
+    { icon: <Lock size={17} className="text-[#00B3FF]" />, title: 'Simple', body: 'Easily integrate with commerce tools your teams use. One dashboard, fully focused on what matters: payments that work.' },
+  ];
+  return (
+    <section className="bg-[#030712] py-24">
+      <div className="max-w-7xl mx-auto px-6">
+        <p className="text-white/30 text-sm text-center mb-12">
+          Making global money movement instant, open, and simple.
+        </p>
+        <div className="grid md:grid-cols-3 gap-px bg-white/[0.04] rounded-2xl overflow-hidden border border-white/[0.05]">
+          {cols.map((c) => (
+            <div key={c.title} className="bg-[#030712] px-8 py-10">
+              <div className="w-9 h-9 rounded-xl bg-[#0000EE]/12 border border-[#0000EE]/18 flex items-center justify-center mb-5">
+                {c.icon}
+              </div>
+              <h3 className="text-white font-semibold text-lg mb-3">{c.title}</h3>
+              <p className="text-white/35 text-sm leading-relaxed">{c.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Stats ── */
+function Stats() {
+  const items = [
+    { val: '$2.4B+', label: 'Processed annually' },
+    { val: '180k+', label: 'Active merchants' },
+    { val: '4.2M+', label: 'Payers worldwide' },
+    { val: '99.97%', label: 'Uptime SLA' },
+  ];
+  return (
+    <section className="bg-[#05080F] border-y border-white/[0.05] py-20">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {items.map((s) => (
+            <div key={s.label} className="text-center">
+              <p className="text-4xl lg:text-5xl font-bold text-white tabular-nums mb-2">{s.val}</p>
+              <p className="text-white/30 text-sm">{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Dual CTA card ── */
+function CTACard() {
+  return (
+    <section className="bg-[#030712] py-24">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="rounded-3xl overflow-hidden grid md:grid-cols-2">
+          <div className="bg-[#0000EE] px-10 py-14">
+            <p className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-4">For Merchants</p>
+            <h3 className="text-white font-bold text-3xl leading-tight mb-4">Start accepting payments today.</h3>
+            <p className="text-white/55 text-sm leading-relaxed mb-8">
+              No setup fees, no monthly minimums. Go live in minutes with one integration across online, in-person, and mobile.
             </p>
+            <a href="/onboarding" className="inline-flex items-center gap-2 h-11 px-6 rounded-full bg-white text-[#0000EE] text-sm font-semibold hover:bg-white/90 transition-colors">
+              Create merchant account <ArrowRight size={14} />
+            </a>
           </div>
-
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-            {[
-              {
-                step: '01',
-                icon: <Building2 size={24} className="text-[#00B3FF]" />,
-                title: 'Create your account',
-                description:
-                  'Register your business in under 5 minutes. Our streamlined KYB process is built for modern companies.',
-                detail: 'Identity verified typically in 2–3 business days.',
-              },
-              {
-                step: '02',
-                icon: <CreditCard size={24} className="text-[#00B3FF]" />,
-                title: 'Connect your bank',
-                description:
-                  'Link your bank account for direct payouts. Supports UK, US, EU, African, and Asia-Pacific banks.',
-                detail: 'Payouts land within 1–2 business days.',
-              },
-              {
-                step: '03',
-                icon: <Zap size={24} className="text-[#00B3FF]" />,
-                title: 'Start accepting payments',
-                description:
-                  'Share a payment link, integrate our checkout API, or use the POS terminal. Take payments instantly.',
-                detail: 'App, POS, and G&S Checkout all included.',
-              },
-            ].map((step) => (
-              <div
-                key={step.step}
-                className="relative bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col gap-4 hover:bg-white/10 transition-all group"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="w-12 h-12 rounded-xl bg-[#00B3FF]/10 flex items-center justify-center">
-                    {step.icon}
-                  </div>
-                  <span className="text-4xl font-black text-white/10 group-hover:text-white/20 transition-colors tabular-nums">
-                    {step.step}
-                  </span>
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white">{step.title}</h3>
-                  <p className="mt-2 text-sm text-[#94A3B8] leading-relaxed">
-                    {step.description}
-                  </p>
-                </div>
-                <p className="text-xs text-[#00B3FF] font-medium mt-auto flex items-center gap-1">
-                  <CheckCircle2 size={12} aria-hidden="true" />
-                  {step.detail}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <a
-              href="/onboarding"
-              className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#0000EE] text-white font-semibold rounded-[14px] hover:bg-[#0000CC] transition-all shadow-lg hover:shadow-xl text-base"
-            >
-              Create merchant account
-              <ArrowRight size={15} aria-hidden="true" />
+          <div className="bg-[#080D1A] border border-white/[0.07] px-10 py-14">
+            <p className="text-[#00B3FF] text-xs font-semibold uppercase tracking-widest mb-4">For Payers</p>
+            <h3 className="text-white font-bold text-3xl leading-tight mb-4">Pay any organisation, instantly.</h3>
+            <p className="text-white/40 text-sm leading-relaxed mb-8">
+              Send money to merchants worldwide. No card fees, no delays. Fast, secure payments that arrive the same second you send them.
+            </p>
+            <a href="/payer" className="inline-flex items-center gap-2 h-11 px-6 rounded-full bg-white/[0.08] border border-white/15 text-white text-sm font-semibold hover:bg-white/12 transition-colors">
+              Download the app <ArrowUpRight size={14} />
             </a>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
 
-      {/* ============================
-          PRODUCTS
-      ============================ */}
-      <section className="py-20 sm:py-28 bg-[#F5F8FF]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <span className="inline-block text-xs font-semibold text-[#0000EE] uppercase tracking-widest mb-3">
-              Products
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-[#111827] tracking-tight">
-              One platform, every payment scenario
-            </h2>
-            <p className="mt-4 text-base text-[#6B7280] max-w-xl mx-auto leading-relaxed">
-              Whether you&apos;re a solo freelancer, a high-street retailer, or a global
-              SaaS business — KingsPay has the product for you.
-            </p>
-          </div>
+/* ── Talk to sales ── */
+function TalkToSales() {
+  return (
+    <section className="bg-[#030712] pb-24 text-center">
+      <div className="max-w-7xl mx-auto px-6">
+        <p className="text-white/35 text-sm mb-3">
+          Processing over £10M/month?{' '}
+          <a href="#" className="text-white underline underline-offset-4 hover:text-[#00B3FF] transition-colors">Talk to sales.</a>{' '}
+          Learn more about how KingsPay can help your enterprise.
+        </p>
+        <a href="#" className="inline-flex items-center gap-2 h-10 px-5 rounded-full border border-white/12 text-white/60 text-sm hover:border-white/25 hover:text-white transition-colors">
+          Contact us <ChevronRight size={14} />
+        </a>
+      </div>
+    </section>
+  );
+}
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: <Smartphone size={22} className="text-[#0000EE]" />,
-                accent: '#0000EE',
-                title: 'KingsPay App',
-                subtitle: 'Payer payments',
-                description:
-                  'Consumer-grade payment app. Send money to any merchant via link or QR code. Multi-currency, instant settlement.',
-                features: [
-                  'Pay via link or QR',
-                  'Multi-currency',
-                  'In-app card storage',
-                  'Real-time notifications',
-                ],
-                cta: 'Learn more',
-              },
-              {
-                icon: <Monitor size={22} className="text-[#00B3FF]" />,
-                accent: '#00B3FF',
-                title: 'KingsPay POS',
-                subtitle: 'In-person payments',
-                description:
-                  'Accept contactless, chip & PIN, and QR code payments in person. Works offline. Receipt printing included.',
-                features: [
-                  'Tap, chip & PIN, QR',
-                  'Works offline',
-                  'Receipt printing',
-                  'Inventory tracking',
-                ],
-                cta: 'Learn more',
-              },
-              {
-                icon: <ShoppingCart size={22} className="text-[#10B981]" />,
-                accent: '#10B981',
-                title: 'G&S Checkout',
-                subtitle: 'Online storefront',
-                description:
-                  'Embeddable checkout for your website or app. SDKs for React, Vue, iOS, and Android. Fraud protection included.',
-                features: [
-                  'Embeddable widget',
-                  'React / Vue / iOS / Android SDKs',
-                  'Fraud detection',
-                  'Hosted checkout page',
-                ],
-                cta: 'Learn more',
-              },
-            ].map((product) => (
-              <div
-                key={product.title}
-                className="bg-white rounded-2xl border border-[#E5E7EB] shadow-[0_2px_12px_rgba(0,0,0,0.06)] overflow-hidden hover:shadow-[0_8px_32px_rgba(0,0,238,0.1)] transition-all group"
-              >
-                {/* Accent top border */}
-                <div
-                  className="h-1 w-full"
-                  style={{ backgroundColor: product.accent }}
-                  aria-hidden="true"
-                />
-                <div className="p-6 flex flex-col gap-4">
-                  <div>
-                    <div
-                      className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
-                      style={{ backgroundColor: `${product.accent}15` }}
-                    >
-                      {product.icon}
-                    </div>
-                    <p
-                      className="text-xs font-semibold uppercase tracking-wide mb-1"
-                      style={{ color: product.accent }}
-                    >
-                      {product.subtitle}
-                    </p>
-                    <h3 className="text-xl font-black text-[#111827]">{product.title}</h3>
-                    <p className="mt-2 text-sm text-[#6B7280] leading-relaxed">
-                      {product.description}
-                    </p>
-                  </div>
-
-                  <ul className="flex flex-col gap-2">
-                    {product.features.map((f) => (
-                      <li key={f} className="flex items-center gap-2 text-sm text-[#374151]">
-                        <CheckCircle2
-                          size={14}
-                          style={{ color: product.accent }}
-                          aria-hidden="true"
-                        />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <a
-                    href="#"
-                    className="inline-flex items-center gap-1 text-sm font-semibold mt-auto transition-all group-hover:gap-2"
-                    style={{ color: product.accent }}
-                  >
-                    {product.cta}
-                    <ChevronRight size={14} aria-hidden="true" />
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============================
-          STATS
-      ============================ */}
-      <section className="py-20 sm:py-28 bg-[#111827]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-              Trusted by merchants and payers worldwide
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12">
-            {[
-              {
-                value: '$2.4B+',
-                label: 'Total processed',
-                icon: <TrendingUp size={20} className="text-[#00B3FF]" />,
-                detail: 'Across 40+ currencies',
-              },
-              {
-                value: '180k+',
-                label: 'Active merchants',
-                icon: <Building2 size={20} className="text-[#00B3FF]" />,
-                detail: 'From sole traders to enterprises',
-              },
-              {
-                value: '4.2M+',
-                label: 'Registered payers',
-                icon: <Users size={20} className="text-[#00B3FF]" />,
-                detail: 'Making payments every day',
-              },
-            ].map((stat) => (
-              <div key={stat.label} className="flex flex-col items-center text-center gap-2">
-                <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-2">
-                  {stat.icon}
-                </div>
-                <p className="text-4xl sm:text-5xl font-black text-white tracking-tight tabular-nums amount">
-                  {stat.value}
-                </p>
-                <p className="text-base font-semibold text-[#E2E8F0]">{stat.label}</p>
-                <p className="text-xs text-[#64748B]">{stat.detail}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============================
-          TESTIMONIALS
-      ============================ */}
-      <section className="py-20 sm:py-28 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <span className="inline-block text-xs font-semibold text-[#0000EE] uppercase tracking-widest mb-3">
-              Merchant stories
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-[#111827] tracking-tight">
-              Real businesses. Real results.
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                quote:
-                  "KingsPay got us taking payments within 48 hours of signing up. The dashboard is clean, payouts are reliable, and their support actually responds. We've never looked back.",
-                name: 'Amara Osei',
-                business: 'Riverside Café, London',
-                emoji: '☕',
-                stars: 5,
-              },
-              {
-                quote:
-                  "We integrated the G&S Checkout SDK in an afternoon. The developer docs are exceptional, fraud rates dropped 60% vs our old provider, and fees are genuinely lower.",
-                name: 'Mikhail Petrov',
-                business: 'TechFlow Studios, Berlin',
-                emoji: '💻',
-                stars: 5,
-              },
-              {
-                quote:
-                  "As a sole trader doing markets and pop-ups, the POS terminal changed everything. Tap payments, offline mode, instant receipts. My customers love the professionalism it brings.",
-                name: 'Yewande Adeyemi',
-                business: 'Lagos Textile Co., Lagos',
-                emoji: '🧵',
-                stars: 5,
-              },
-            ].map((testimonial) => (
-              <div
-                key={testimonial.name}
-                className="bg-[#F5F8FF] rounded-2xl border border-[#E5E7EB] p-6 flex flex-col gap-4 hover:shadow-[0_4px_24px_rgba(0,0,238,0.08)] transition-all"
-              >
-                {/* Stars */}
-                <div className="flex gap-0.5">
-                  {Array.from({ length: testimonial.stars }).map((_, i) => (
-                    <Star
-                      key={i}
-                      size={14}
-                      className="fill-[#F59E0B] text-[#F59E0B]"
-                      aria-hidden="true"
-                    />
-                  ))}
-                </div>
-
-                <blockquote className="text-sm text-[#374151] leading-relaxed italic flex-1">
-                  &ldquo;{testimonial.quote}&rdquo;
-                </blockquote>
-
-                <div className="flex items-center gap-3 pt-2 border-t border-[#E5E7EB]">
-                  <div className="w-9 h-9 rounded-full bg-[#E8E8FF] flex items-center justify-center text-lg shrink-0">
-                    {testimonial.emoji}
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-[#111827]">{testimonial.name}</p>
-                    <p className="text-xs text-[#9CA3AF]">{testimonial.business}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============================
-          DUAL CTA
-      ============================ */}
-      <section id="for-payers" className="py-20 sm:py-28 bg-[#F5F8FF]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-black text-[#111827] tracking-tight">
-              Built for everyone in the payment chain
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Merchants */}
-            <div className="bg-[#000B2E] rounded-2xl p-8 flex flex-col gap-6">
-              <div>
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#00B3FF] uppercase tracking-widest mb-3">
-                  <Building2 size={12} />
-                  For Merchants
-                </span>
-                <h3 className="text-2xl font-black text-white leading-tight">
-                  Grow revenue without growing headaches
-                </h3>
-                <p className="mt-2 text-sm text-[#94A3B8] leading-relaxed">
-                  KingsPay gives your business every tool it needs to accept payments
-                  globally, manage payouts, and understand your revenue — all in one
-                  dashboard.
-                </p>
-              </div>
-
-              <ul className="flex flex-col gap-3">
-                {[
-                  'Accept payments online, in-person, and via link',
-                  'Get paid to any bank account in 40+ countries',
-                  'Transparent fee structure — no surprises',
-                  'Real-time dashboard & instant notifications',
-                  'PCI DSS compliant infrastructure out of the box',
-                ].map((benefit) => (
-                  <li key={benefit} className="flex items-start gap-2.5 text-sm text-[#CBD5E1]">
-                    <CheckCircle2 size={15} className="text-[#00B3FF] shrink-0 mt-0.5" aria-hidden="true" />
-                    {benefit}
-                  </li>
-                ))}
-              </ul>
-
-              <a
-                href="/onboarding"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#0000EE] text-white font-semibold rounded-[12px] hover:bg-[#0000CC] transition-all mt-auto"
-              >
-                Start accepting payments
-                <ArrowRight size={14} aria-hidden="true" />
-              </a>
+/* ── Footer ── */
+function Footer() {
+  const cols = [
+    { heading: 'Products', links: ['KingsPay App', 'POS Terminal', 'G&S Checkout', 'API', 'SDK'] },
+    { heading: 'Company', links: ['About', 'Blog', 'Careers', 'Press', 'Contact'] },
+    { heading: 'Developers', links: ['Documentation', 'API Reference', 'Status', 'Changelog', 'GitHub'] },
+    { heading: 'Legal', links: ['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'Compliance'] },
+  ];
+  return (
+    <footer className="bg-[#030712] border-t border-white/[0.05]">
+      <div className="max-w-7xl mx-auto px-6 pt-16 pb-8">
+        <div className="flex flex-col md:flex-row justify-between gap-12 mb-16">
+          <div className="max-w-xs">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-7 h-7 rounded-[7px] bg-[#0000EE] flex items-center justify-center text-white font-black text-sm">K</div>
+              <span className="text-white font-semibold">Kings<span className="text-[#00B3FF]">Pay</span></span>
             </div>
-
-            {/* Payers */}
-            <div className="bg-white rounded-2xl border border-[#E5E7EB] p-8 flex flex-col gap-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
-              <div>
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#FF6B35] uppercase tracking-widest mb-3">
-                  <Smartphone size={12} />
-                  For Payers
-                </span>
-                <h3 className="text-2xl font-black text-[#111827] leading-tight">
-                  Pay any merchant, anywhere, instantly
-                </h3>
-                <p className="mt-2 text-sm text-[#6B7280] leading-relaxed">
-                  The KingsPay app makes paying your favourite merchants simple, fast,
-                  and secure. One tap to pay, real-time receipts, and full transaction
-                  history.
-                </p>
-              </div>
-
-              <ul className="flex flex-col gap-3">
-                {[
-                  'Pay via link, QR code, or search',
-                  'Store cards securely — never re-enter details',
-                  'Multi-currency with real-time conversion rates',
-                  'Instant payment confirmation & digital receipts',
-                  'Zero fees for standard payments',
-                ].map((benefit) => (
-                  <li key={benefit} className="flex items-start gap-2.5 text-sm text-[#374151]">
-                    <CheckCircle2 size={15} className="text-[#FF6B35] shrink-0 mt-0.5" aria-hidden="true" />
-                    {benefit}
-                  </li>
-                ))}
-              </ul>
-
-              <a
-                href="/payer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#FF6B35] text-white font-semibold rounded-[12px] hover:bg-[#E55A22] transition-all mt-auto"
-              >
-                Create payer account
-                <ArrowRight size={14} aria-hidden="true" />
-              </a>
-            </div>
+            <p className="text-white/25 text-sm leading-relaxed">The payments platform built for the speed of now.</p>
           </div>
-        </div>
-      </section>
-
-      {/* ============================
-          FOOTER
-      ============================ */}
-      <footer className="bg-[#111827] text-[#94A3B8]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12">
-            {/* Brand */}
-            <div className="col-span-2 md:col-span-1 flex flex-col gap-4">
-              <div className="flex items-center gap-1.5 font-bold text-lg">
-                <span className="w-7 h-7 rounded-[8px] bg-[#0000EE] text-white text-sm font-black flex items-center justify-center">
-                  K
-                </span>
-                <span className="text-white">
-                  Kings<span className="text-[#0000EE]">Pay</span>
-                </span>
-              </div>
-              <p className="text-sm leading-relaxed max-w-xs">
-                Powering payments for merchants and consumers worldwide since 2022.
-              </p>
-              {/* Socials */}
-              <div className="flex gap-2">
-                {['𝕏', 'in', 'f', '◻'].map((social) => (
-                  <a
-                    key={social}
-                    href="#"
-                    className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-xs font-bold text-white transition-colors"
-                    aria-label={`KingsPay on ${social}`}
-                  >
-                    {social}
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Nav columns */}
-            {[
-              {
-                title: 'Products',
-                links: ['App Payments', 'POS Terminal', 'G&S Checkout', 'Payment Links', 'API & SDK'],
-              },
-              {
-                title: 'Company',
-                links: ['About us', 'Careers', 'Press', 'Blog', 'Partners'],
-              },
-              {
-                title: 'Support',
-                links: ['Help centre', 'Contact us', 'System status', 'Security', 'Community'],
-              },
-              {
-                title: 'Legal',
-                links: ['Privacy policy', 'Terms of service', 'Cookie policy', 'Compliance', 'Licenses'],
-              },
-            ].map((col) => (
-              <div key={col.title} className="flex flex-col gap-3">
-                <p className="text-xs font-bold text-white uppercase tracking-wider">
-                  {col.title}
-                </p>
-                <ul className="flex flex-col gap-2">
-                  {col.links.map((link) => (
-                    <li key={link}>
-                      <a
-                        href="#"
-                        className="text-sm hover:text-white transition-colors"
-                      >
-                        {link}
-                      </a>
-                    </li>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {cols.map((c) => (
+              <div key={c.heading}>
+                <p className="text-white/40 text-xs font-semibold uppercase tracking-wider mb-4">{c.heading}</p>
+                <ul className="space-y-2.5">
+                  {c.links.map((l) => (
+                    <li key={l}><a href="#" className="text-white/25 text-sm hover:text-white/55 transition-colors">{l}</a></li>
                   ))}
                 </ul>
               </div>
             ))}
           </div>
-
-          {/* Bottom bar */}
-          <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-xs">
-              © {new Date().getFullYear()} KingsPay Ltd. Registered in England & Wales. All rights reserved.
-            </p>
-            <div className="flex items-center gap-3 text-xs">
-              <span className="flex items-center gap-1">
-                <Shield size={11} aria-hidden="true" />
-                PCI DSS Certified
-              </span>
-              <span className="text-white/20">|</span>
-              <span className="flex items-center gap-1">
-                <Lock size={11} aria-hidden="true" />
-                256-bit TLS
-              </span>
-              <span className="text-white/20">|</span>
-              <span className="flex items-center gap-1">
-                <BarChart3 size={11} aria-hidden="true" />
-                SOC 2 Type II
-              </span>
-            </div>
-          </div>
         </div>
-      </footer>
-    </div>
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 border-t border-white/[0.05]">
+          <p className="text-white/18 text-xs">© 2026 KingsPay Ltd. All rights reserved.</p>
+          <p className="text-white/18 text-xs">Regulated by the FCA · PCI DSS Level 1</p>
+        </div>
+      </div>
+
+      {/* Giant wordmark */}
+      <div className="overflow-hidden">
+        <p
+          className="text-center font-bold select-none leading-none pb-0"
+          style={{ fontSize: 'clamp(72px, 16vw, 220px)', letterSpacing: '-0.04em', color: 'rgba(255,255,255,0.04)' }}
+        >
+          KingsPay
+        </p>
+      </div>
+    </footer>
+  );
+}
+
+/* ── Page ── */
+export default function LandingPage() {
+  return (
+    <main className="bg-[#030712]">
+      <Navbar />
+      <Hero />
+      <PartnerBar />
+      <ProductSection
+        eyebrow="Merchant Dashboard"
+        headline="Your payments command centre."
+        body="Real-time transactions, instant payouts, and product controls — all in one place. Built for merchants who move fast and need clarity at a glance."
+        link="Explore the dashboard"
+        visual={<DashboardVisual />}
+      />
+      <ProductSection
+        eyebrow="Global Coverage"
+        headline="Send and receive anywhere in the world."
+        body="40+ country corridors, multi-currency support, and instant cross-border settlement. KingsPay connects every market without the legacy friction."
+        link="See all corridors"
+        visual={<NetworkVisual />}
+        reverse
+      />
+      <ProductSection
+        eyebrow="Security"
+        headline="Bank-grade security, by default."
+        body="PCI DSS Level 1, SOC 2 Type II, and zero plaintext storage. Every transaction is encrypted end-to-end from the moment it leaves your device."
+        link="Read our security docs"
+        visual={<SecurityVisual />}
+      />
+      <Features />
+      <Stats />
+      <CTACard />
+      <TalkToSales />
+      <Footer />
+    </main>
   );
 }
